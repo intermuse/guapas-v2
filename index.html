@@ -2,100 +2,252 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Menú Digital</title>
 
 <style>
+:root {
+    --bg: #f4f4f4;
+    --text: #000;
+    --header: #8B0000;
+}
+
+body.dark {
+    --bg: #000;
+    --text: #fff;
+    --header: #111;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html, body {
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* ===== HEADER ===== */
+.header {
+    position: fixed;
+    top: 0;
     width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #000;
+    background: var(--header);
+    color: white;
+    z-index: 1000;
+    padding: 10px;
+    animation: slideDown 0.6s ease;
 }
 
-.flipbook {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    perspective: 3000px;
-    transform-style: preserve-3d;
+@keyframes slideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
 }
 
-.page {
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    background: white;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.header-text {
+    flex: 1;
+}
+
+.header-text h1 {
+    font-size: 18px;
+}
+
+.header-text p {
+    font-size: 12px;
+}
+
+.header-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.header-buttons a,
+.header-buttons button {
+    font-size: 12px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.header-buttons a:hover,
+.header-buttons button:hover {
+    transform: scale(1.05);
+}
+
+.whatsapp {
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+}
+
+.mode-btn {
+    background: #444;
+    color: white;
+}
+
+/* ===== MENÚ ===== */
+.menu {
+    margin-top: 100px;
+}
+
+.menu img {
     width: 100%;
-    height: 100%;
-    position: absolute;
-    transform-origin: left center;
-    transition: transform 0.9s ease;
-    background: #000;
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
+    display: block;
+    cursor: zoom-in;
+    opacity: 1;
+    transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.page img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
 }
 
-.controls {
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.menu img.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== ZOOM ===== */
+.zoom {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+.zoom img {
+    max-width: 95%;
+    max-height: 95%;
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); }
+    to { transform: scale(1); }
+}
+
+/* ===== VOLVER ARRIBA ===== */
+#topBtn {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    display: flex;
-    gap: 10px;
-    z-index: 999;
+    background: #8B0000;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    font-size: 18px;
+    display: none;
+    z-index: 1500;
+    animation: float 2s infinite ease-in-out;
 }
 
-button {
-    padding: 12px 18px;
-    font-size: 20px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(139, 0, 0, 0.85);
-    color: white;
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
 }
 </style>
 </head>
 
 <body>
 
-<div class="flipbook" id="book">
-    <div class="page"><img src="paginas/menu1.png"></div>
-    <div class="page"><img src="paginas/menu2.png"></div>
-    <div class="page"><img src="paginas/menu3.png"></div>
+<header class="header">
+    <div class="header-content">
+        <img src="logo.png" class="logo" alt="Logo">
+
+        <div class="header-text">
+            <h1>Las guapas de coapa</h1>
+            <p>🕒 Lun–Dom 14:00 – 23:00</p>
+            <!-- <p>📍 Calle Principal #123</p> -->
+        </div>
+
+        <div class="header-buttons">
+            <a class="whatsapp" href="https://wa.me/5219999999999" target="_blank">
+                WhatsApp
+            </a>
+            <button class="mode-btn" onclick="toggleMode()">🌙 / ☀️</button>
+        </div>
+    </div>
+</header>
+
+<div class="menu">
+    <img src="paginas/menu1.png" class="fade-in">
+    <img src="paginas/menu2.png" class="fade-in">
+    <img src="paginas/menu3.png" class="fade-in">
 </div>
 
-<div class="controls">
-    <button onclick="prev()">⬅</button>
-    <button onclick="next()">➡</button>
+<!-- Zoom -->
+<div class="zoom" id="zoom" onclick="closeZoom()">
+    <img id="zoomImg">
 </div>
+
+<!-- Volver arriba -->
+<button id="topBtn" onclick="scrollTopSmooth()">⬆</button>
 
 <script>
-const pages = document.querySelectorAll('.page');
-let current = 0;
-
-pages.forEach((page, i) => {
-    page.style.zIndex = pages.length - i;
+// ===== ZOOM =====
+document.querySelectorAll(".menu img").forEach(img => {
+    img.onclick = () => {
+        document.getElementById("zoomImg").src = img.src;
+        document.getElementById("zoom").style.display = "flex";
+    };
 });
 
-function next() {
-    if (current < pages.length - 1) {
-        pages[current].style.transform = "rotateY(-180deg)";
-        current++;
-    }
+function closeZoom() {
+    document.getElementById("zoom").style.display = "none";
 }
 
-function prev() {
-    if (current > 0) {
-        current--;
-        pages[current].style.transform = "rotateY(0deg)";
-    }
+// ===== VOLVER ARRIBA =====
+const topBtn = document.getElementById("topBtn");
+
+window.onscroll = () => {
+    topBtn.style.display = window.scrollY > 300 ? "block" : "none";
+};
+
+function scrollTopSmooth() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ===== MODO OSCURO =====
+function toggleMode() {
+    document.body.classList.toggle("dark");
 }
 </script>
 
