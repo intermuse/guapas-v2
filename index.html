@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Menú Digital</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+
+.flipbook {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    perspective: 3000px;
+    transform-style: preserve-3d;
+}
+
+.page {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-origin: left center;
+    transition: transform 0.9s ease;
+    background: #000;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+.page img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 999;
+}
+
+button {
+    padding: 12px 18px;
+    font-size: 20px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(139, 0, 0, 0.85);
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="flipbook" id="book">
+    <div class="page"><img src="paginas/menu1.png"></div>
+    <div class="page"><img src="paginas/menu2.png"></div>
+    <div class="page"><img src="paginas/menu3.png"></div>
+</div>
+
+<div class="controls">
+    <button onclick="prev()">⬅</button>
+    <button onclick="next()">➡</button>
+</div>
+
+<script>
+const pages = document.querySelectorAll('.page');
+let current = 0;
+
+pages.forEach((page, i) => {
+    page.style.zIndex = pages.length - i;
+});
+
+function next() {
+    if (current < pages.length - 1) {
+        pages[current].style.transform = "rotateY(-180deg)";
+        current++;
+    }
+}
+
+function prev() {
+    if (current > 0) {
+        current--;
+        pages[current].style.transform = "rotateY(0deg)";
+    }
+}
+</script>
+
+</body>
+</html>
